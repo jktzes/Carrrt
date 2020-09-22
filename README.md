@@ -6,7 +6,7 @@
 - [x] display item names and prices on CartScreen with minimal styles
 - [x] enable user to add an item with keyboard
 - [x] enable user to remove an item
-- [ ] enable user to use camera to add an item
+- [x] enable user to use camera to add an item
 - [ ] add basic loading state
 - [ ] add basic error handling
 - [ ] add a minimal backend to simulate real-world network requests

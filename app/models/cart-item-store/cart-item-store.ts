@@ -1,6 +1,13 @@
 import { Instance, SnapshotOut, types as t } from "mobx-state-tree"
 import { CartItem, CartItemModel } from "../cart-item/cart-item"
 
+const calculateSubTotalByPriceAndQuantity = (priceString, quantity) => {
+  return {
+    currencyString: priceString[0],
+    currencyQuantity: parseInt(priceString.split(priceString[0])[1]) * quantity
+  }
+}
+
 export const sampleCatalog =
   [
     {
@@ -26,16 +33,16 @@ export const sampleCatalog =
     }
   ]
 
-const defaultCartState = [
-  { quantity: 1, meta: sampleCatalog[0], lastUpdatedAt: new Date() },
-  { quantity: 2, meta: sampleCatalog[1], lastUpdatedAt: new Date() },
-  { quantity: 3, meta: sampleCatalog[2], lastUpdatedAt: new Date() },
-]
+const defaultCartState = []
 
 export interface ItemInCart {
   quantity: number,
   meta: CartItem,
-  lastUpdatedAt: Date
+  lastUpdatedAt: Date,
+  subTotal: {
+    currencyString: string,
+    currencyQuantity: number
+  }
 }
 
 /**
@@ -45,16 +52,38 @@ export const CartItemStoreModel = t.model({
   cartItems: t.optional(t.array(t.model({
     quantity: t.number,
     meta: CartItemModel,
-    lastUpdatedAt: t.Date
+    lastUpdatedAt: t.Date,
+    subTotal: t.optional(t.model({
+      currencyString: t.string,
+      currencyQuantity: t.number
+    }), {
+      currencyString: '$',
+      currencyQuantity: 0
+    })
   })), defaultCartState)
 })
   .props({})
-  .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views(self => ({
+    get total() {
+      let totalCounter = 0
+      self.cartItems.map((item) => {
+        totalCounter = totalCounter + item.subTotal.currencyQuantity
+      })
+      return {
+        currencyString: self.cartItems.length > 0 ? self.cartItems[0].subTotal.currencyString : '$',
+        currencyQuantity: totalCounter
+      }
+    }
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
     incrementItemById: (id: string) => {
       const existingItem = self.cartItems.find((item => item.meta.id === id))
+      const calculateItemSubTotal = () => {
+        existingItem.subTotal = calculateSubTotalByPriceAndQuantity(existingItem.meta.price, existingItem.quantity)
+      }
       if (existingItem) {
         existingItem.quantity++
+        calculateItemSubTotal()
         return existingItem
       } else {
         const itemInCatalog = sampleCatalog.find((item => item.id === id))
@@ -64,6 +93,7 @@ export const CartItemStoreModel = t.model({
             meta: itemInCatalog,
             lastUpdatedAt: new Date()
           }
+          itemToAdd.subTotal = calculateSubTotalByPriceAndQuantity(itemToAdd.meta.price, 1)
           self.cartItems.push(itemToAdd)
           return itemToAdd
         } else {
@@ -73,11 +103,15 @@ export const CartItemStoreModel = t.model({
     },
     decrementItemById: (id: string) => {
       const existingItem = self.cartItems.find((item => item.meta.id === id))
+      const calculateItemSubTotal = () => {
+        existingItem.subTotal = calculateSubTotalByPriceAndQuantity(existingItem.meta.price, existingItem.quantity)
+      }
       if (existingItem) {
         if (existingItem.quantity === 1) {
           self.cartItems = self.cartItems.filter(item => item.meta.id !== id)
         } else {
           existingItem.quantity--
+          calculateItemSubTotal()
         }
         return existingItem
       } else {

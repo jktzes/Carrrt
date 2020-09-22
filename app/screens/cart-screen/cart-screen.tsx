@@ -11,12 +11,16 @@ const ROOT: ViewStyle = {
 }
 
 interface ICartItemProps {
-  quantity: number,
+  quantity: number
   meta: CartItem
+  subTotal: {
+    currencyString: string
+    currencyQuantity: number
+  }
 }
 
 const CartItemBlock = observer((props: ICartItemProps) => {
-  const { quantity, meta } = props
+  const { quantity, meta, subTotal } = props
   const { cartItemStore } = useStores()
 
   const incrementItem = () => {
@@ -35,7 +39,7 @@ const CartItemBlock = observer((props: ICartItemProps) => {
       </View>
       <View style={[t.flex, t.flexRow, t.justifyBetween, t.itemsCenter, t.w24, t.flexGrow0, t.flexShrink0]}>
         <Button
-          style={[t.flex, t.flexRow, t.justifyCenter, t.itemsCenter, t.w6, t.h6, t.flexGrow0, t.flexShrink0, t.roundedFull, t.bgTeal]}
+          style={[t.flex, t.flexRow, t.justifyCenter, t.itemsCenter, t.w8, t.h8, t.flexGrow0, t.flexShrink0, t.roundedFull, t.bgTeal]}
           onPress={decrementItem}
         >
           <Text text={`－`} style={[t.textWhite]} />
@@ -44,25 +48,26 @@ const CartItemBlock = observer((props: ICartItemProps) => {
           <Text text={`${quantity.toString()}`} />
         </View>
         <Button
-          style={[t.flex, t.flexRow, t.justifyCenter, t.itemsCenter, t.w6, t.h6, t.flexGrow0, t.flexShrink0, t.roundedFull, t.bgTeal]}
+          style={[t.flex, t.flexRow, t.justifyCenter, t.itemsCenter, t.w8, t.h8, t.flexGrow0, t.flexShrink0, t.roundedFull, t.bgTeal]}
           onPress={incrementItem}
         >
           <Text text={`+`} style={[t.textWhite]} />
         </Button>
       </View>
       <View style={[t.flex, t.flexRow, t.justifyEnd, t.itemsCenter, t.w24, t.flexGrow0, t.flexShrink0]}>
-        <Text text={meta.price} />
+        <Text text={`${subTotal.currencyString} ${subTotal.currencyQuantity.toFixed(2)}`} />
       </View>
     </View>
   )
 })
 
 export const CartScreen = observer(function CartScreen() {
-  const { cartItemStore: { cartItems } } = useStores()
+  const { cartItemStore: { cartItems, total } } = useStores()
   const navigation = useNavigation()
-
-  const navigateToAddItemScreen = () => {
-    navigation.navigate('add-item')
+  const navigateToAddItemScreen = (mode: 'qr-code' | 'keyboard' = 'qr-code') => {
+    navigation.navigate('add-item', {
+      mode: mode
+    })
   }
 
   // Pull in one of our MST stores
@@ -72,24 +77,33 @@ export const CartScreen = observer(function CartScreen() {
 
   // Pull in navigation via hook
   // const navigation = useNavigation()
+
   return (
     <Screen style={[ROOT, t.flex, t.flexCol, t.justifyBetween]} preset="scroll">
       <View style={[t.flexGrow0, t.flexShrink0, t.p4]} >
         <Text preset="header" text="Shopping Cart" />
       </View>
 
-      <View style={[t.flexGrow]}>
+      <View style={[t.flexGrow, t.itemsStart]}>
         {
           cartItems.map((item) => {
             return (
-              <CartItemBlock quantity={item.quantity} meta={item.meta} key={item.meta.id} />
+              <CartItemBlock quantity={item.quantity} meta={item.meta} subTotal={item.subTotal} key={item.meta.id} />
             )
           })
+        }
+        {
+          cartItems.length === 0 &&
+          <View style={[t.flex, t.flexRow, t.flexGrow, t.wFull, t.justifyCenter, t.itemsCenter]}>
+            <Text> No Items Added Yet </Text>
+          </View>
         }
       </View>
 
       <View style={[t.flexGrow0, t.flexShrink0, t.p4]} >
-        <Button text="Add Item" onPress={navigateToAddItemScreen} />
+        <Text style={[t.mY2]}>Total: {total.currencyString} {total.currencyQuantity.toFixed(2)} </Text>
+        <Button style={[t.mY2]} text="Add Item via QR Code" onPress={() => { navigateToAddItemScreen('qr-code') }} />
+        <Button text="Add Item via Keyboard" onPress={() => { navigateToAddItemScreen('keyboard') }} />
       </View>
     </Screen>
   )

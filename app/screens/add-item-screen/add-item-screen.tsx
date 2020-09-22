@@ -1,13 +1,12 @@
 import React, { useState } from "react"
 import { observer } from "mobx-react-lite"
-import { StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native"
+import { View, ViewStyle } from "react-native"
 import { Button, Screen, Text, TextField } from "../../components"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import { ItemInCart, useStores } from "../../models"
 import { t } from "react-native-tailwindcss"
 import { uniqBy } from 'lodash'
 import QRCodeScanner from 'react-native-qrcode-scanner'
-import { RNCamera } from 'react-native-camera'
 
 const ROOT: ViewStyle = {
   flex: 1,
@@ -19,9 +18,9 @@ export interface IAddItemPromptProps {
 }
 
 const AddItemPrompt = (props: IAddItemPromptProps) => {
-  const {itemId, itemInfo} = props
+  const { itemId, itemInfo } = props
   if (itemInfo) {
-    return ( <Text text={`✅ Added item ${itemInfo.meta.name}, item price: ${itemInfo.meta.price}, latest quantity: ${itemInfo.quantity}.`} />
+    return (<Text text={`✅ Added item ${itemInfo.meta.name}, item price: ${itemInfo.meta.price}, latest quantity: ${itemInfo.quantity}.`} />
     )
   } else {
     return (
@@ -30,47 +29,30 @@ const AddItemPrompt = (props: IAddItemPromptProps) => {
   }
 }
 
-const styles = StyleSheet.create({
-  centerText: {
-    flex: 1,
-    fontSize: 18,
-    padding: 32,
-    color: '#777'
-  },
-  textBold: {
-    fontWeight: '500',
-    color: '#000'
-  },
-  buttonText: {
-    fontSize: 21,
-    color: 'rgb(0,122,255)'
-  },
-  buttonTouchable: {
-    padding: 16
-  }
-});
-
-
 export const AddItemScreen = observer(function AddItemScreen() {
   const { cartItemStore } = useStores()
   const [itemId, setItemId] = useState<string>('')
   const [addItemPrompts, setAddItemPrompts] = useState<Array<IAddItemPromptProps>>([])
   const navigation = useNavigation()
+  const routes = useRoute()
+  const { params: { mode } } = routes
 
   const navigateToCartScreen = () => {
     navigation.navigate('cart')
   }
 
-  const addItemToCart = () => {
-    const res = cartItemStore.incrementItemById(itemId)
+  const addItemToCartById = (id) => {
+    const res = cartItemStore.incrementItemById(id)
 
     setAddItemPrompts((existingPrompts) => {
-      return [...existingPrompts, { itemId: itemId, itemInfo: res }]
+      return [...existingPrompts, { itemId: id, itemInfo: res }]
     })
   }
 
-  const onSuccess = (e) => {
-    console.log('e on qr code', e)
+  const onScanSuccess = (e) => {
+    const itemId = e.data
+    setItemId(itemId)
+    addItemToCartById(itemId)
   }
 
   // Pull in one of our MST stores
@@ -101,26 +83,18 @@ export const AddItemScreen = observer(function AddItemScreen() {
         }
       </View>
 
-
-   <QRCodeScanner
-        onRead={onSuccess}
-        flashMode={RNCamera.Constants.FlashMode.torch}
-        topContent={
-          <Text style={styles.centerText}>
-            Go to{' '}
-            <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
-            your computer and scan the QR code.
-          </Text>
-        }
-        bottomContent={
-          <TouchableOpacity style={styles.buttonTouchable}>
-            <Text style={styles.buttonText}>OK. Got it!</Text>
-          </TouchableOpacity>
-        }
+      { mode === 'qr-code' && <QRCodeScanner
+        cameraProps={{
+          "style": [t.w36, t.h10]
+        }}
+        onRead={onScanSuccess}
+        reactivateTimeout={1000}
+        reactivate={true}
       />
+      }
 
       <View style={[t.flexGrow0, t.flexShrink0, t.p4]} >
-        <Button text="Add" onPress={addItemToCart} style={t.mY2} />
+        { mode === 'keyboard' && <Button text="Add" onPress={() => { addItemToCartById(itemId) }} style={t.mY2} />}
         <Button text="Done" onPress={navigateToCartScreen} style={t.mY2} />
       </View>
     </Screen>
