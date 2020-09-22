@@ -15,6 +15,8 @@
 
 ## Quick Start
 
+`yarn && yarn android`
+
 ```
 ignite-project
 ├── app
