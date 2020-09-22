@@ -14,7 +14,7 @@ const ROOT: ViewStyle = {
 export const AddItemScreen = observer(function AddItemScreen() {
   const navigation = useNavigation()
 
-  const navigateToAddItemScreen = () => {
+  const navigateToCartScreen = () => {
     navigation.navigate('cart')
   }
   // Pull in one of our MST stores
@@ -27,7 +27,7 @@ export const AddItemScreen = observer(function AddItemScreen() {
   return (
     <Screen style={ROOT} preset="scroll">
       <Text preset="header" text="addItemScreen" />
-      <Button text="Done" onPress={navigateToAddItemScreen} />
+      <Button text="Done" onPress={navigateToCartScreen} />
     </Screen>
   )
 })

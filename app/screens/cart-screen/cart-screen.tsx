@@ -3,7 +3,7 @@ import { observer } from "mobx-react-lite"
 import { ViewStyle } from "react-native"
 import { Button, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
+import { useStores } from "../../models"
 import { color } from "../../theme"
 
 const ROOT: ViewStyle = {
@@ -12,9 +12,11 @@ const ROOT: ViewStyle = {
 }
 
 export const CartScreen = observer(function CartScreen() {
+  const { cartItemStore } = useStores()
   const navigation = useNavigation()
 
   const navigateToAddItemScreen = () => {
+    console.log('pressed')
     navigation.navigate('add-item')
   }
 
