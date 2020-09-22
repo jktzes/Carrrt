@@ -17,6 +17,8 @@
 
 `yarn && yarn android`
 
+[Download APK Here](https://jktzes.s3-us-west-2.amazonaws.com/app-release.apk)
+
 ```
 ignite-project
 ├── app
