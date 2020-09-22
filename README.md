@@ -1,7 +1,7 @@
 # Carrrt
 ## Todo List Ordered by Priority
-- [ ] add a CartScreen and an AddItemScreen 
-- [ ] connect two screens with an add button
+- [x] add a CartScreen and an AddItemScreen 
+- [x] connect two screens with an add button
 - [ ] use sample data as the default state of CartScreen
 - [ ] display item names and prices on CartScreen with minimal styles
 - [ ] enable user to add an item with keyboard
