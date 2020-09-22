@@ -5,6 +5,7 @@ import { translate } from "../../i18n"
 import { Text } from "../text/text"
 import { TextFieldProps } from "./text-field.props"
 import { mergeAll, flatten } from "ramda"
+import { t } from 'react-native-tailwindcss'
 
 // the base styling for the container
 const CONTAINER: ViewStyle = {
@@ -53,13 +54,13 @@ export function TextField(props: TextFieldProps) {
 
   return (
     <View style={containerStyle}>
-      <Text preset="fieldLabel" tx={labelTx} text={label} />
+      {label && <Text preset="fieldLabel" tx={labelTx} text={label} />}
       <TextInput
         placeholder={actualPlaceholder}
         placeholderTextColor={color.palette.lighterGrey}
         underlineColorAndroid={color.transparent}
         {...rest}
-        style={inputStyle}
+        style={[inputStyle, t.pX2]}
         ref={forwardedRef}
       />
     </View>

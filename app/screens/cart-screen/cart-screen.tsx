@@ -53,7 +53,7 @@ export const CartScreen = observer(function CartScreen() {
   // const navigation = useNavigation()
   return (
     <Screen style={[ROOT, t.flex, t.flexCol, t.justifyBetween]} preset="scroll">
-      <View style={[t.flexGrow0, t.flexShrink0]} >
+      <View style={[t.flexGrow0, t.flexShrink0, t.p4]} >
         <Text preset="header" text="cartScreen" />
       </View>
 
