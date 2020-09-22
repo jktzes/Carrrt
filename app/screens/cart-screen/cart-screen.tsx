@@ -15,24 +15,47 @@ interface ICartItemProps {
   meta: CartItem
 }
 
-const CartItemBlock = (props: ICartItemProps) => {
+const CartItemBlock = observer((props: ICartItemProps) => {
   const { quantity, meta } = props
+  const { cartItemStore } = useStores()
+
+  const incrementItem = () => {
+    cartItemStore.incrementItemById(meta.id)
+  }
+
+  const decrementItem = () => {
+    cartItemStore.decrementItemById(meta.id)
+  }
+
   return (
     <View style={[t.flex, t.flexRow, t.justifyBetween, t.p4]}>
       <View style={[t.flex, t.flexRow, t.justifyStart, t.itemsCenter, t.flexGrow]}>
         <Image source={{ uri: meta.thumbnail }} style={[t.w10, t.h10, t.mR4]} />
         <Text text={meta.name} />
       </View>
-      <View style={[t.flex, t.flexRow, t.justifyEnd, t.itemsCenter, t.w24, t.flexGrow0, t.flexShrink0]}>
-        <Text text={`${quantity.toString()}`} />
-
+      <View style={[t.flex, t.flexRow, t.justifyBetween, t.itemsCenter, t.w24, t.flexGrow0, t.flexShrink0]}>
+        <Button
+          style={[t.flex, t.flexRow, t.justifyCenter, t.itemsCenter, t.w6, t.h6, t.flexGrow0, t.flexShrink0, t.roundedFull, t.bgTeal]}
+          onPress={decrementItem}
+        >
+          <Text text={`－`} style={[t.textWhite]} />
+        </Button>
+        <View style={[t.flexGrow, t.flex, t.flexRow, t.justifyCenter]} >
+          <Text text={`${quantity.toString()}`} />
+        </View>
+        <Button
+          style={[t.flex, t.flexRow, t.justifyCenter, t.itemsCenter, t.w6, t.h6, t.flexGrow0, t.flexShrink0, t.roundedFull, t.bgTeal]}
+          onPress={incrementItem}
+        >
+          <Text text={`+`} style={[t.textWhite]} />
+        </Button>
       </View>
       <View style={[t.flex, t.flexRow, t.justifyEnd, t.itemsCenter, t.w24, t.flexGrow0, t.flexShrink0]}>
         <Text text={meta.price} />
       </View>
     </View>
   )
-}
+})
 
 export const CartScreen = observer(function CartScreen() {
   const { cartItemStore: { cartItems } } = useStores()

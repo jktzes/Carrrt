@@ -1,5 +1,9 @@
 module.exports = {
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        teal: '#18cdb7'
+      }
+    },
   },
 }

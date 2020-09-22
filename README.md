@@ -5,12 +5,12 @@
 - [x] use sample data as the default state of CartScreen
 - [x] display item names and prices on CartScreen with minimal styles
 - [x] enable user to add an item with keyboard
-- [ ] enable user to remove an item
+- [x] enable user to remove an item
 - [ ] enable user to use camera to add an item
 - [ ] add basic loading state
 - [ ] add basic error handling
 - [ ] add a minimal backend to simulate real-world network requests
-- [ ] enable users to adjust item quantity with plus and minus buttons
+- [x] enable users to adjust item quantity with plus and minus buttons
 - [ ] persist app state
 
 ## Quick Start

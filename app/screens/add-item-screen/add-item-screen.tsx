@@ -39,7 +39,7 @@ export const AddItemScreen = observer(function AddItemScreen() {
   }
 
   const addItemToCart = () => {
-    const res = cartItemStore.addItemById(itemId)
+    const res = cartItemStore.incrementItemById(itemId)
 
     setAddItemPrompts((existingPrompts) => {
       return [...existingPrompts, { itemId: itemId, itemInfo: res }]

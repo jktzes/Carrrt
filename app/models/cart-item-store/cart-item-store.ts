@@ -51,7 +51,7 @@ export const CartItemStoreModel = t.model({
   .props({})
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions(self => ({
-    addItemById: (id: string) => {
+    incrementItemById: (id: string) => {
       const existingItem = self.cartItems.find((item => item.meta.id === id))
       if (existingItem) {
         existingItem.quantity++
@@ -69,6 +69,19 @@ export const CartItemStoreModel = t.model({
         } else {
           return null
         }
+      }
+    },
+    decrementItemById: (id: string) => {
+      const existingItem = self.cartItems.find((item => item.meta.id === id))
+      if (existingItem) {
+        if (existingItem.quantity === 1) {
+          self.cartItems = self.cartItems.filter(item => item.meta.id !== id)
+        } else {
+          existingItem.quantity--
+        }
+        return existingItem
+      } else {
+        return null
       }
     }
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
