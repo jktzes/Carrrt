@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types as t } from "mobx-state-tree"
-import { CartItemModel } from "../cart-item/cart-item"
+import { CartItem, CartItemModel } from "../cart-item/cart-item"
 
-const sampleCatalog =
+export const sampleCatalog =
   [
     {
       "id": "0001",
@@ -32,6 +32,11 @@ const defaultCartState = [
   { quantity: 3, meta: sampleCatalog[2], lastUpdatedAt: new Date() },
 ]
 
+export interface ItemInCart {
+  quantity: number,
+  meta: CartItem,
+  lastUpdatedAt: Date
+}
 
 /**
  * Model description here for TypeScript hints.
@@ -45,7 +50,28 @@ export const CartItemStoreModel = t.model({
 })
   .props({})
   .views(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions(self => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions(self => ({
+    addItemById: (id: string) => {
+      const existingItem = self.cartItems.find((item => item.meta.id === id))
+      if (existingItem) {
+        existingItem.quantity++
+        return existingItem
+      } else {
+        const itemInCatalog = sampleCatalog.find((item => item.id === id))
+        if (itemInCatalog) {
+          const itemToAdd = {
+            quantity: 1,
+            meta: itemInCatalog,
+            lastUpdatedAt: new Date()
+          }
+          self.cartItems.push(itemToAdd)
+          return itemToAdd
+        } else {
+          return null
+        }
+      }
+    }
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**
 * Un-comment the following to omit model attributes from your snapshots (and from async storage).

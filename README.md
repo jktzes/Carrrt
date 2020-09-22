@@ -4,7 +4,7 @@
 - [x] connect two screens with an add button
 - [x] use sample data as the default state of CartScreen
 - [x] display item names and prices on CartScreen with minimal styles
-- [ ] enable user to add an item with keyboard
+- [x] enable user to add an item with keyboard
 - [ ] enable user to remove an item
 - [ ] enable user to use camera to add an item
 - [ ] add basic loading state

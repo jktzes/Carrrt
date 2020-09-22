@@ -40,7 +40,6 @@ export const CartScreen = observer(function CartScreen() {
   const navigation = useNavigation()
 
   const navigateToAddItemScreen = () => {
-    console.log('pressed')
     navigation.navigate('add-item')
   }
 
