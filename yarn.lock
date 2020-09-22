@@ -6659,6 +6659,11 @@ ignite-bowser@^5.3.0:
     ramda "^0.26.1"
     read-pkg-up "^7.0.0"
 
+ignite-camera@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/ignite-camera/-/ignite-camera-0.0.1.tgz#da12b31c3c24b5046c8374d740fb126a8b02da9a"
+  integrity sha512-tE/vFRB8i2a7Xkfb5pCimyUA5wYlbMc8kbeSMXtZ3U0O0RoeL8sG6pMHlx62r0OzFH3meRKI/JfQC9ZGPxtGwA==
+
 ignore@^3.3.5:
   version "3.3.10"
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-3.3.10.tgz#0a97fb876986e8081c631160f8f9f389157f0043"
@@ -10511,6 +10516,13 @@ react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
+
+react-native-camera@^3.40.0:
+  version "3.40.0"
+  resolved "https://registry.yarnpkg.com/react-native-camera/-/react-native-camera-3.40.0.tgz#69845991e46b0892cc2b50322d49b18f292c3202"
+  integrity sha512-Ur0hZqZcl3SntTVMB9GxuiLYpQxqwgzhQVb+7EGae4WjfDzQEwlGF0bJ7UpZyeUTb1oZmsiSib58xUckn11XMw==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-native-flipper@^0.34.0:
   version "0.34.0"
