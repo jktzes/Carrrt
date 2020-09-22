@@ -3,7 +3,10 @@
 buildscript {
     ext {
         buildToolsVersion = "29.0.2"
-        minSdkVersion = 16
+        minSdkVersion = 21 
+        // TODO: add multidex fix for sdk version below 21
+        // this is a workaround for multidex over 64k
+        // learn more at https://developer.android.com/studio/build/multidex#java
         compileSdkVersion = 29
         targetSdkVersion = 29
     }
