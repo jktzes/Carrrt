@@ -4,11 +4,9 @@ import { Image, View, ViewStyle } from "react-native"
 import { Button, Screen, Text } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import { CartItem, useStores } from "../../models"
-import { color } from "../../theme"
 import { t } from 'react-native-tailwindcss'
 
 const ROOT: ViewStyle = {
-  backgroundColor: color.palette.black,
   flex: 1,
 }
 
@@ -26,7 +24,8 @@ const CartItemBlock = (props: ICartItemProps) => {
         <Text text={meta.name} />
       </View>
       <View style={[t.flex, t.flexRow, t.justifyEnd, t.itemsCenter, t.w24, t.flexGrow0, t.flexShrink0]}>
-        <Text text={quantity.toString()} />
+        <Text text={`${quantity.toString()}`} />
+
       </View>
       <View style={[t.flex, t.flexRow, t.justifyEnd, t.itemsCenter, t.w24, t.flexGrow0, t.flexShrink0]}>
         <Text text={meta.price} />
@@ -53,7 +52,7 @@ export const CartScreen = observer(function CartScreen() {
   return (
     <Screen style={[ROOT, t.flex, t.flexCol, t.justifyBetween]} preset="scroll">
       <View style={[t.flexGrow0, t.flexShrink0, t.p4]} >
-        <Text preset="header" text="cartScreen" />
+        <Text preset="header" text="Shopping Cart" />
       </View>
 
       <View style={[t.flexGrow]}>
@@ -66,7 +65,7 @@ export const CartScreen = observer(function CartScreen() {
         }
       </View>
 
-      <View style={[t.flexGrow0, t.flexShrink0]} >
+      <View style={[t.flexGrow0, t.flexShrink0, t.p4]} >
         <Button text="Add Item" onPress={navigateToAddItemScreen} />
       </View>
     </Screen>
