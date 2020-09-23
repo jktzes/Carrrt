@@ -4,7 +4,7 @@ import { CartItem, CartItemModel } from "../cart-item/cart-item"
 const calculateSubTotalByPriceAndQuantity = (priceString, quantity) => {
   return {
     currencyString: priceString[0],
-    currencyQuantity: parseInt(priceString.split(priceString[0])[1]) * quantity
+    currencyQuantity: parseFloat(priceString.split(priceString[0])[1]) * quantity
   }
 }
 
@@ -84,7 +84,7 @@ export const CartItemStoreModel = t.model({
       if (existingItem) {
         existingItem.quantity++
         calculateItemSubTotal()
-        return existingItem
+        return { ... existingItem, lastUpdatedAt: new Date() }
       } else {
         const itemInCatalog = sampleCatalog.find((item => item.id === id))
         if (itemInCatalog) {

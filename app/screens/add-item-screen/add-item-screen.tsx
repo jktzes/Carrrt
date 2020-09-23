@@ -5,7 +5,7 @@ import { Button, Screen, Text, TextField } from "../../components"
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { ItemInCart, useStores } from "../../models"
 import { t } from "react-native-tailwindcss"
-import { uniqBy } from 'lodash'
+import { uniqBy, sortBy, reverse } from 'lodash'
 import QRCodeScanner from 'react-native-qrcode-scanner'
 
 const ROOT: ViewStyle = {
@@ -45,7 +45,7 @@ export const AddItemScreen = observer(function AddItemScreen() {
     const res = cartItemStore.incrementItemById(id)
 
     setAddItemPrompts((existingPrompts) => {
-      return [...existingPrompts, { itemId: id, itemInfo: res }]
+      return [...existingPrompts, JSON.parse(JSON.stringify({ itemId: id, itemInfo: res }))]
     })
   }
 
@@ -75,9 +75,9 @@ export const AddItemScreen = observer(function AddItemScreen() {
           placeholder="Please Type Item Id"
         />
         {
-          uniqBy(addItemPrompts, 'itemId').map((singlePrompt) => {
+          uniqBy(reverse(sortBy(addItemPrompts, item => item.itemInfo.lastUpdatedAt.valueOf())), 'itemId').map((singlePrompt) => {
             return (
-              <AddItemPrompt itemId={singlePrompt.itemId} itemInfo={singlePrompt.itemInfo} key={singlePrompt.itemId} />
+              <AddItemPrompt itemId={singlePrompt.itemId} itemInfo={singlePrompt.itemInfo} key={singlePrompt.itemId + singlePrompt.itemInfo.lastUpdatedAt} />
             )
           })
         }
